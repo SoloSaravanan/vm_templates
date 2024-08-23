@@ -1,0 +1,103 @@
+<domain type='kvm'>
+  <name>Whonix-Gateway</name>
+  <uuid>8d559e17-a35d-4a8b-92d7-ea93a1f9d1e0</uuid>
+  <genid>63de3029-89f4-4e9d-9d90-8cd40b74517f</genid>
+  <memory dumpCore='off' unit='KiB'>524288</memory>
+  <currentMemory unit='KiB'>524288</currentMemory>
+  <blkiotune>
+    <weight>250</weight>
+  </blkiotune>
+  <memoryBacking>
+    <nosharepages/>
+    <allocation mode='ondemand'/>
+    <discard/>
+  </memoryBacking>
+  <vcpu placement='static' cpuset='0'>2</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-8.2'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <hap state='on'/>
+    <pvspinlock state='on'/>
+    <pmu state='off'/>
+    <vmport state='off'/>
+  </features>
+  <cpu mode='host-passthrough' check='none' migratable='on'/>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup' track='guest'/>
+    <timer name='kvmclock' present='yes'/>
+    <timer name='pit' present='no'/>
+    <timer name='hpet' present='no'/>
+    <timer name='hypervclock' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/media/applications/ISO/Whonix-Gateway.qcow2'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </disk>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+    </controller>
+    <controller type='usb' index='0' model='piix3-uhci'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
+    <interface type='network'>
+      <mac address='52:54:00:83:d8:24'/>
+      <source network='Whonix-External'/>
+      <model type='virtio'/>
+      <driver name='qemu'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <interface type='network'>
+      <mac address='52:54:00:87:00:af'/>
+      <source network='Whonix-Internal'/>
+      <model type='virtio'/>
+      <driver name='qemu'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='spice' autoport='yes'>
+      <listen type='address'/>
+      <clipboard copypaste='yes'/>
+      <filetransfer enable='no'/>
+      <gl enable='no'/>
+    </graphics>
+    <audio id='1' type='spice'/>
+    <video>
+      <model type='virtio' heads='1' primary='yes'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='none'/>
+    <rng model='virtio'>
+      <backend model='random'>/dev/urandom</backend>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+    </rng>
+  </devices>
+</domain>
+
